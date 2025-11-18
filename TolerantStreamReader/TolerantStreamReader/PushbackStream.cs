@@ -40,9 +40,8 @@ public class PushbackStream(Stream inner) : Stream
 
     public void Unread(byte[] buffer)
     {
-        var auxiliary = new MemoryStream(buffer.Length + (int)_pushback.Length);
+        var auxiliary = new MemoryStream(buffer.Length + (int)(_pushback.Length - _pushback.Position));
         auxiliary.Write(buffer);
-        _pushback.Position = 0;
         _pushback.CopyTo(auxiliary);
         _pushback.Dispose();
         _pushback = auxiliary;

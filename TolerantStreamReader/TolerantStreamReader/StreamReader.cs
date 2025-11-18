@@ -15,12 +15,16 @@ public class StreamReader(Stream stream, byte[] magic, TimeSpan delayBetweenRead
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                // TODO: read magic.Length + sizeof(int) bytes here right away and check if it starts with the magic.
-                // If yes, proceed, if no, unread sizeof(int) bytes and start looking for the magic using the slower ReadMagicInternal method.
-                await ReadMagicInternal(cancellationToken);
-                using var sizeBuffer = await ReadFromStreamExact(sizeof(int), cancellationToken);
+                using var magicAndSizeBuffer = await ReadFromStreamExact(magic.Length + sizeof(int), cancellationToken);
+                if (!magicAndSizeBuffer.Memory.Span[..magic.Length].SequenceEqual(magic))
+                {
+                    _stream.Unread(magicAndSizeBuffer.Memory.Span[magic.Length..].ToArray());
+                    await ReadMagicInternal(cancellationToken);
+                    _stream.Unread(magic);
+                    continue;
+                }
                 // TODO: validate size against some maximum threshold
-                var size = BitConverter.ToInt32(sizeBuffer.Memory.Span);
+                var size = BitConverter.ToInt32(magicAndSizeBuffer.Memory.Span[magic.Length..]);
                 using var payload = await ReadFromStreamExact(size, cancellationToken);
                 using var expectedHashBuffer = await ReadFromStreamExact(sizeof(uint), cancellationToken);
                 var expectedHash = BitConverter.ToUInt32(expectedHashBuffer.Memory.Span);
@@ -32,7 +36,7 @@ public class StreamReader(Stream stream, byte[] magic, TimeSpan delayBetweenRead
 
                 _stream.Unread(expectedHashBuffer.Memory.ToArray());
                 _stream.Unread(payload.Memory.ToArray());
-                _stream.Unread(sizeBuffer.Memory.ToArray());
+                _stream.Unread(magicAndSizeBuffer.Memory.Span[magic.Length..].ToArray());
             }
         });
 

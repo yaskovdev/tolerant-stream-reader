@@ -21,6 +21,33 @@ public class PushbackStreamTests
         await ReadAndAssertExpectedBytes(instanceUnderTest, 2, [5]);
     }
 
+    [TestMethod]
+    public async Task Should2()
+    {
+        using var inner = new MemoryStream(Enumerable.Range(0, 24).Select(i => (byte)i).ToArray());
+        var instanceUnderTest = new PushbackStream(inner);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 12, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+        instanceUnderTest.Unread([8, 9, 10, 11]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [8]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [9]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [10]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [11]);
+
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [12]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [13]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [14]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [15]);
+        
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [16]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [17]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [18]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [19]);
+
+        instanceUnderTest.Unread([16, 17, 18, 19]);
+        
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 8, [16, 17, 18, 19, 20, 21, 22, 23]);
+    }
+
     private static async Task ReadAndAssertExpectedBytes(Stream stream, int bytesToRead, byte[] expected)
     {
         var buffer = new Memory<byte>(new byte[bytesToRead]);
