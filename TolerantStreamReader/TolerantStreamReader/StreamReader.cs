@@ -19,7 +19,7 @@ public class StreamReader(Stream stream, byte[] magic, TimeSpan delayBetweenRead
                 if (!magicAndSizeBuffer.Memory.Span[..magic.Length].SequenceEqual(magic))
                 {
                     _stream.Unread(magicAndSizeBuffer.Memory.Span[magic.Length..].ToArray());
-                    await ReadMagicInternal(cancellationToken);
+                    await AdvanceToNextMagic(cancellationToken);
                     _stream.Unread(magic);
                     continue;
                 }
@@ -43,7 +43,7 @@ public class StreamReader(Stream stream, byte[] magic, TimeSpan delayBetweenRead
     /// <summary>
     /// Reads the specified magic byte sequence from the stream, advancing until the full sequence is matched.
     /// </summary>
-    private async Task ReadMagicInternal(CancellationToken cancellationToken)
+    private async Task AdvanceToNextMagic(CancellationToken cancellationToken)
     {
         var matchedMagicBytes = 0;
 
