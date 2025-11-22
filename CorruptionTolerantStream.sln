@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TolerantStreamReader", "TolerantStreamReader\TolerantStreamReader.csproj", "{47EBEEE4-AAD2-4597-8B93-75DDD950C68B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptionTolerantStream", "CorruptionTolerantStream\CorruptionTolerantStream.csproj", "{47EBEEE4-AAD2-4597-8B93-75DDD950C68B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7DA61DF0-EA0A-4859-AFB3-52FE2E9501AF}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TolerantStreamReader.Tests", "TolerantStreamReader.Tests\TolerantStreamReader.Tests.csproj", "{014C673D-5744-4BC7-9AA6-B041E206CD32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptionTolerantStream.Tests", "CorruptionTolerantStream.Tests\CorruptionTolerantStream.Tests.csproj", "{014C673D-5744-4BC7-9AA6-B041E206CD32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
