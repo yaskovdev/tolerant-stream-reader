@@ -2,7 +2,7 @@ namespace CorruptionTolerantStream;
 
 using System.Buffers;
 
-public class ReadBuffer(int size) : IDisposable
+internal class ReadBuffer(int size) : IDisposable
 {
     private readonly IMemoryOwner<byte> _buffer = MemoryPool<byte>.Shared.Rent(size);
 

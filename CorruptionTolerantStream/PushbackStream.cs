@@ -1,6 +1,6 @@
 namespace CorruptionTolerantStream;
 
-public class PushbackStream(Stream inner) : Stream
+internal class PushbackStream(Stream inner) : Stream
 {
     private MemoryStream _pushback = new();
 
