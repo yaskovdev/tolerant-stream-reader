@@ -38,7 +38,7 @@ public class PushbackStream(Stream inner) : Stream
         return totalRead;
     }
 
-    public void Unread(byte[] buffer)
+    public void Unread(ReadOnlySpan<byte> buffer)
     {
         var auxiliary = new MemoryStream(buffer.Length + (int)(_pushback.Length - _pushback.Position));
         auxiliary.Write(buffer);
