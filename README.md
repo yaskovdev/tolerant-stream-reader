@@ -1,4 +1,4 @@
-# Corruption-Tolerant Frame Protocol for .NET
+# Corruption-Tolerant Frame Protocol for .NET  [![Build Status](https://github.com/yaskovdev/corruption-tolerant-stream/actions/workflows/dotnet.yml/badge.svg)](https://github.com/yaskovdev/corruption-tolerant-stream/actions/workflows/dotnet.yml)
 
 **Because streams fail.**
 
