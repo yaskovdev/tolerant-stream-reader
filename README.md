@@ -26,7 +26,7 @@ systems, and any use case where a typical stream reader is too fragile.
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using TolerantStreamReader;
+using CorruptionTolerantStream;
 
 // Writing a payload
 var payload = new byte[] { 1, 2, 3 };

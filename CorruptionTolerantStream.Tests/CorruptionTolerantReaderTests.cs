@@ -1,4 +1,4 @@
-namespace TolerantStreamReader.Tests;
+namespace CorruptionTolerantStream.Tests;
 
 using System.Collections.Immutable;
 

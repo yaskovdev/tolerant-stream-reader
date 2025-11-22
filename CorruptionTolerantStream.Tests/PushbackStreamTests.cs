@@ -1,4 +1,4 @@
-namespace TolerantStreamReader.Tests;
+namespace CorruptionTolerantStream.Tests;
 
 [TestClass]
 public class PushbackStreamTests

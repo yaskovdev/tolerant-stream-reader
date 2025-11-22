@@ -1,4 +1,4 @@
-namespace TolerantStreamReader;
+namespace CorruptionTolerantStream;
 
 public static class Constants
 {

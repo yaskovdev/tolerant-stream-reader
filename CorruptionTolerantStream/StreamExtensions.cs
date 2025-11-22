@@ -1,4 +1,4 @@
-namespace TolerantStreamReader;
+namespace CorruptionTolerantStream;
 
 using System.IO.Hashing;
 

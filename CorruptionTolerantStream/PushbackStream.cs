@@ -1,4 +1,4 @@
-namespace TolerantStreamReader;
+namespace CorruptionTolerantStream;
 
 public class PushbackStream(Stream inner) : Stream
 {
