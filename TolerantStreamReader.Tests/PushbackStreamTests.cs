@@ -1,8 +1,5 @@
 namespace TolerantStreamReader.Tests;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Shouldly;
-
 [TestClass]
 public class PushbackStreamTests
 {

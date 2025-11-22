@@ -3,7 +3,7 @@ namespace TolerantStreamReader;
 using System.IO.Hashing;
 using LanguageExt;
 
-public class StreamReader : IStreamReader
+public class CorruptionTolerantReader : ICorruptionTolerantReader
 {
     private readonly PushbackStream _stream;
     private readonly byte[] _magic;
@@ -16,7 +16,7 @@ public class StreamReader : IStreamReader
     private readonly Range _frameHeaderSizeHashRange;
     private readonly int _frameHeaderSize;
 
-    public StreamReader(Stream stream, byte[]? magic, Action<long>? onInvalidFrameHeader = null, Action<long>? onInvalidPayloadHash = null)
+    public CorruptionTolerantReader(Stream stream, byte[]? magic = null, Action<long>? onInvalidFrameHeader = null, Action<long>? onInvalidPayloadHash = null)
     {
         _magic = magic ?? Constants.Magic;
         _onInvalidFrameHeader = onInvalidFrameHeader ?? (_ => { });
@@ -28,7 +28,13 @@ public class StreamReader : IStreamReader
         _stream = new PushbackStream(stream);
     }
 
-    public Aff<ReadResult> ReadNext(CancellationToken cancellationToken) =>
+    public async Task<ReadResult> ReadNext(CancellationToken cancellationToken)
+    {
+        var res = await ReadNextInternal(cancellationToken).Run();
+        return res.ThrowIfFail();
+    }
+
+    private Aff<ReadResult> ReadNextInternal(CancellationToken cancellationToken) =>
         Prelude.Aff(async () =>
         {
             while (true)
