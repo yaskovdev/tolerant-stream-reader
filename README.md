@@ -25,6 +25,7 @@ systems, and any use case where a typical stream reader is too fragile.
 ```csharp
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using TolerantStreamReader;
 
 // Writing a payload
