@@ -1,1 +1,0 @@
-# Tolerant Stream Reader

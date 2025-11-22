@@ -1,1 +1,1 @@
-# tolerant-stream-reader
+# Tolerant Stream Reader
