@@ -25,6 +25,7 @@ public class CorruptionTolerantReader : ICorruptionTolerantReader
         _frameHeaderSizeRange = _magic.Length..(_magic.Length + sizeof(int));
         _frameHeaderSizeHashRange = (_magic.Length + sizeof(int))..(_magic.Length + sizeof(int) + sizeof(uint));
         _frameHeaderSize = _frameHeaderSizeHashRange.End.Value - _frameHeaderMagicRange.Start.Value;
+        // See https://learn.microsoft.com/en-us/dotnet/api/system.io.memorystream?view=net-8.0#remarks, as to why there's no need to dispose the PushbackStream
         _stream = new PushbackStream(stream);
     }
 

@@ -42,3 +42,15 @@ if (result.ReadStatus == ReadStatus.Success)
     // Use result.Payload
 }
 ```
+
+## Package Publishing
+
+```shell
+./publish.sh "ghp_ge8Q9Vr7Kcv1N8DLSDmjTG06sqVjrt2MustL"
+```
+
+Where `ghp_ge8Q9Vr7Kcv1N8DLSDmjTG06sqVjrt2MustL` is a GitHub personal access token.
+
+Check the package in [GitHub Packages](https://github.com/yaskovdev?tab=packages).
+
+Link it to the repository, if necessary.
