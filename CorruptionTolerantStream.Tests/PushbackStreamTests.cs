@@ -4,45 +4,44 @@ namespace CorruptionTolerantStream.Tests;
 public class PushbackStreamTests
 {
     [TestMethod]
-    public async Task ShouldSupportUnread()
+    public async Task ShouldReadFromPushbackThenFromInnerStream()
     {
-        using var inner = new MemoryStream(Enumerable.Range(0, 6).Select(i => (byte)i).ToArray());
+        using var inner = new MemoryStream(Enumerable.Range(0, 2).Select(i => (byte)i).ToArray());
         await using var instanceUnderTest = new PushbackStream(inner);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 3, [0, 1, 2]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [3]);
-        instanceUnderTest.Unread([2, 3]);
-        instanceUnderTest.Unread([0, 1]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 0, []);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 3, [0, 1, 2]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 2, [3, 4]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 2, [5]);
+
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [0]);
+        instanceUnderTest.Unread([0]);
+
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 2, [0, 1]);
     }
 
     [TestMethod]
-    public async Task Should2()
+    public async Task ShouldReadZeroBytes()
     {
-        using var inner = new MemoryStream(Enumerable.Range(0, 24).Select(i => (byte)i).ToArray());
+        using var inner = new MemoryStream([]);
         await using var instanceUnderTest = new PushbackStream(inner);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 12, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
-        instanceUnderTest.Unread([8, 9, 10, 11]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [8]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [9]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [10]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [11]);
 
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [12]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [13]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [14]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [15]);
-        
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [16]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [17]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [18]);
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [19]);
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 0, []);
+    }
 
-        instanceUnderTest.Unread([16, 17, 18, 19]);
-        
-        await ReadAndAssertExpectedBytes(instanceUnderTest, 8, [16, 17, 18, 19, 20, 21, 22, 23]);
+    [TestMethod]
+    public async Task ShouldSupportUnread_WhenPushbackStreamIsPartiallyRead()
+    {
+        using var inner = new MemoryStream(Enumerable.Range(0, 2).Select(i => (byte)i).ToArray());
+        await using var instanceUnderTest = new PushbackStream(inner);
+
+        // Create the pushback stream
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 2, [0, 1]);
+        instanceUnderTest.Unread([0, 1]);
+
+        // Read from the pushback stream partially
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 1, [0]);
+
+        // Unread to partially read pushback stream
+        instanceUnderTest.Unread([0]);
+
+        // Assert that we can read all bytes again
+        await ReadAndAssertExpectedBytes(instanceUnderTest, 2, [0, 1]);
     }
 
     private static async Task ReadAndAssertExpectedBytes(Stream stream, int bytesToRead, byte[] expected)
